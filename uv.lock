@@ -1,0 +1,18 @@
+version = 1
+requires-python = ">=3.13"
+
+[[package]]
+name = "dd-lint-shell"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "gitignore-parser" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "gitignore-parser", git = "https://github.com/jordemort/gitignore_parser?rev=type-stubs" }]
+
+[[package]]
+name = "gitignore-parser"
+version = "0.1.12"
+source = { git = "https://github.com/jordemort/gitignore_parser?rev=type-stubs#f6d6d5772c01082b241c83b39710dafd72d50d94" }

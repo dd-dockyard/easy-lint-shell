@@ -1,0 +1,20 @@
+[project]
+name = "dd-lint-shell"
+version = "0.1.0"
+readme = "README.md"
+authors = [{ name = "Jordan Webb", email = "jordan@dangerdevices.com" }]
+requires-python = ">=3.13"
+dependencies = [
+    "gitignore-parser",
+]
+
+[project.scripts]
+dd-check-shell = "dd_lint_shell:check_shell"
+dd-fix-shell = "dd_lint_shell:fix_shell"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+gitignore-parser = { git = "https://github.com/jordemort/gitignore_parser", rev = "type-stubs" }
