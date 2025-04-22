@@ -2,17 +2,21 @@ version = 1
 requires-python = ">=3.13"
 
 [[package]]
-name = "dd-lint-shell"
-version = "0.1.0"
+name = "easy-lint-shell"
+version = "0.1.dev1"
 source = { editable = "." }
 dependencies = [
-    { name = "gitignore-parser" },
+    { name = "git-check-ignore" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "gitignore-parser", git = "https://github.com/jordemort/gitignore_parser?rev=type-stubs" }]
+requires-dist = [{ name = "git-check-ignore", specifier = ">=1.0.1" }]
 
 [[package]]
-name = "gitignore-parser"
-version = "0.1.12"
-source = { git = "https://github.com/jordemort/gitignore_parser?rev=type-stubs#f6d6d5772c01082b241c83b39710dafd72d50d94" }
+name = "git-check-ignore"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cf/23/404ed51f46eeccf9af78448800d595124a0ae1e19a47ee0f08acd59a5675/git_check_ignore-1.0.1.tar.gz", hash = "sha256:a0c6d6be218846a30aadf2bb0ffadebf06e53264278fc8f71366ee0620dae428", size = 17891 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7c/54/946a78f4a370676a2fda47676d25ea2770f73b7e34eb87bf32ba4bfbb2a3/git_check_ignore-1.0.1-py3-none-any.whl", hash = "sha256:a2835f87c04c836bb65eb227e8c439aa4bbbaee98b974d9e3d04ff3bb0093530", size = 16202 },
+]

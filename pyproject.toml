@@ -1,20 +1,22 @@
 [project]
-name = "dd-lint-shell"
-version = "0.1.0"
+name = "easy-lint-shell"
+dynamic = ["version"]
+description = "Easy check-shell and fix-shell scripts, built on shfmt, shellcheck and reviewdog"
 readme = "README.md"
 authors = [{ name = "Jordan Webb", email = "jordan@dangerdevices.com" }]
 requires-python = ">=3.13"
-dependencies = [
-    "gitignore-parser",
-]
+dependencies = ["git-check-ignore>=1.0.1"]
 
 [project.scripts]
-dd-check-shell = "dd_lint_shell:check_shell"
-dd-fix-shell = "dd_lint_shell:fix_shell"
+check-shell = "easy_lint_shell:check_shell"
+fix-shell = "easy_lint_shell:fix_shell"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
-[tool.uv.sources]
-gitignore-parser = { git = "https://github.com/jordemort/gitignore_parser", rev = "type-stubs" }
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
