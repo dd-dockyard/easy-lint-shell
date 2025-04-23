@@ -5,7 +5,6 @@ from pathlib import Path
 
 from git_check_ignore import not_ignored_paths
 
-import os
 import subprocess
 import sys
 
@@ -19,46 +18,6 @@ def in_git_repo() -> bool:
             check=False,
         ).returncode
         == 0
-    )
-
-
-def in_pull_request_action() -> bool:
-    if os.getenv("GITHUB_ACTIONS", "") != "true":
-        return False
-
-    if os.getenv("GITHUB_EVENT_NAME", "") != "pull_request":
-        return False
-
-    return True
-
-
-@cache
-def which_reviewdog() -> str | None:
-    return which("reviewdog")
-
-
-def should_reviewdog() -> bool:
-    return in_pull_request_action() and which_reviewdog() is not None
-
-
-def reviewdog_pr_review(input: str, format: str = "diff") -> None:
-    reviewdog = which_reviewdog()
-    if reviewdog is None:
-        print("ERROR: reviewdog not on PATH")
-        print(input)
-        return
-
-    _ = subprocess.run(
-        [
-            reviewdog,
-            f"-f={format}",
-            "-name=shellcheck",
-            "-reporter=github-pr-review",
-            "-level=warning",
-            "-fail-level=none",
-        ],
-        input=input,
-        check=True,
     )
 
 
@@ -112,22 +71,7 @@ def check_shell():
 
     shellcheck_argv = [which_shellcheck(), "-x", *sys.argv[1:]]
 
-    if should_reviewdog():
-        shellcheck = subprocess.run(
-            shellcheck_argv + ["--format=checkstyle"] + shell_scripts,
-            check=False,
-            stdout=subprocess.PIPE,
-            encoding="utf-8",
-        )
-
-        exit_status = shellcheck.returncode
-        reviewdog_pr_review(shellcheck.stdout, "checkstyle")
-    else:
-        exit_status = subprocess.run(
-            shellcheck_argv + shell_scripts, check=False
-        ).returncode
-
-    sys.exit(exit_status)
+    return subprocess.run(shellcheck_argv + shell_scripts, check=False).returncode
 
 
 def fix_shell():
@@ -149,16 +93,6 @@ def fix_shell():
         stdout=subprocess.PIPE,
     )
 
-    diff = shellcheck.stdout
-    exit_status = shellcheck.returncode
+    _ = subprocess.run(["patch", "-p1"], input=shellcheck.stdout, check=True)
 
-    apply_patch(diff, p=1)
-
-    if should_reviewdog():
-        git_diff = subprocess.run(
-            ["git", "diff"], check=True, encoding="utf-8", stdout=subprocess.PIPE
-        ).stdout
-
-        reviewdog_pr_review(git_diff)
-
-    sys.exit(exit_status)
+    return shellcheck.returncode
